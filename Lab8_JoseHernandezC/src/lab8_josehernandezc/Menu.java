@@ -371,7 +371,7 @@ public class Menu extends javax.swing.JFrame {
         try {
             if (jt_contactos.getSelectedRow() >= 0) {
                 String referencia = (String) jt_contactos.getValueAt(jt_contactos.getSelectedRow(), 2);
-                System.out.println(referencia);
+
                 int opcion = Integer.parseInt(JOptionPane.showInputDialog("1.Modificar Nombre\n"
                         + "2.Modificar Edad\n"
                         + "3.Modificar Numero de Telefono\n"
@@ -379,33 +379,35 @@ public class Menu extends javax.swing.JFrame {
                         + "5.Modificar Direccion"));
                 if (opcion == 1) {
                     String newName = JOptionPane.showInputDialog("Ingrese el Nuevo Nombre");
+
                     jt_contactos.setValueAt(newName, jt_contactos.getSelectedRow(), 0);
-                    db.query.execute("update Contactos set nombre =" + newName + " where numCel =" + referencia);
+
+                    db.query.execute("update Contactos set nombre = '" + newName + "' where numCel = '" + referencia + "'");
                     db.commit();
 
                 }
                 if (opcion == 2) {
                     int newEdad = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la nueva Edad"));
                     jt_contactos.setValueAt(newEdad, jt_contactos.getSelectedRow(), 1);
-                    db.query.execute("update Contactos set edad=" + newEdad + "where numCel=" + referencia);
+                    db.query.execute("update Contactos set edad= '" + newEdad + "' where numCel= '" + referencia + "'");
                     db.commit();
                 }
                 if (opcion == 3) {
                     int newNuero = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el Nuevo Numero de Celular"));
                     jt_contactos.setValueAt(newNuero, jt_contactos.getSelectedRow(), 2);
-                    db.query.execute("update Contactos set numCel=" + newNuero + "where numCel=" + referencia);
+                    db.query.execute("update Contactos set numCel= '" + newNuero + "' where numCel= '" + referencia + "'");
                     db.commit();
                 }
                 if (opcion == 4) {
                     String newCorreo = JOptionPane.showInputDialog("Ingrese el nuevo Correo");
                     jt_contactos.setValueAt(newCorreo, jt_contactos.getSelectedRow(), 3);
-                    db.query.execute("update Contactos set correo=" + newCorreo + "where numCel=" + referencia);
+                    db.query.execute("update Contactos set correo= '" + newCorreo + "' where numCel='" + referencia + "'");
                     db.commit();
                 }
                 if (opcion == 5) {
                     String newDireccion = JOptionPane.showInputDialog("Ingrese La Nueva Direccion");
                     jt_contactos.setValueAt(newDireccion, jt_contactos.getSelectedRow(), 4);
-                    db.query.execute("update Contactos set direccion=" + newDireccion + "where numCel" + referencia);
+                    db.query.execute("update Contactos set direccion= '" + newDireccion + "' where numCel='" + referencia + "'");
                     db.commit();
                 }
             }
