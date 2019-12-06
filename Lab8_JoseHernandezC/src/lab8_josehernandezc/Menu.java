@@ -7,6 +7,8 @@ package lab8_josehernandezc;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -54,6 +56,10 @@ public class Menu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jd_mensaje = new javax.swing.JDialog();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        ta_mensaje = new javax.swing.JTextArea();
+        jButton5 = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -72,9 +78,44 @@ public class Menu extends javax.swing.JFrame {
         jt_contactos = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
+
+        ta_mensaje.setColumns(20);
+        ta_mensaje.setRows(5);
+        jScrollPane2.setViewportView(ta_mensaje);
+
+        jButton5.setText("Enviar");
+        jButton5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton5MouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jd_mensajeLayout = new javax.swing.GroupLayout(jd_mensaje.getContentPane());
+        jd_mensaje.getContentPane().setLayout(jd_mensajeLayout);
+        jd_mensajeLayout.setHorizontalGroup(
+            jd_mensajeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jd_mensajeLayout.createSequentialGroup()
+                .addGap(63, 63, 63)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(71, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jd_mensajeLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton5)
+                .addGap(53, 53, 53))
+        );
+        jd_mensajeLayout.setVerticalGroup(
+            jd_mensajeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jd_mensajeLayout.createSequentialGroup()
+                .addGap(54, 54, 54)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                .addComponent(jButton5)
+                .addGap(19, 19, 19))
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -198,6 +239,13 @@ public class Menu extends javax.swing.JFrame {
             }
         });
 
+        jButton4.setText("Enviar Mensaje");
+        jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton4MouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -209,9 +257,11 @@ public class Menu extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(171, 171, 171)
                 .addComponent(jButton2)
-                .addGap(182, 182, 182)
+                .addGap(47, 47, 47)
+                .addComponent(jButton4)
+                .addGap(62, 62, 62)
                 .addComponent(jButton3)
-                .addContainerGap(182, Short.MAX_VALUE))
+                .addContainerGap(150, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -221,7 +271,8 @@ public class Menu extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(jButton3)
+                    .addComponent(jButton4))
                 .addGap(53, 53, 53))
         );
 
@@ -270,7 +321,7 @@ public class Menu extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 778, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -385,6 +436,38 @@ public class Menu extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButton3MouseClicked
 
+    private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
+        jd_mensaje.pack();
+        jd_mensaje.setModal(true);
+        jd_mensaje.setLocationRelativeTo(this);
+
+        jd_mensaje.setVisible(true);
+        Date fecha = new Date();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        String envio = df.format(fecha);
+
+
+    }//GEN-LAST:event_jButton4MouseClicked
+
+    private void jButton5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton5MouseClicked
+        Dba db = new Dba("./registro.accdb");
+        db.conectar();
+        try {
+            Date fecha = new Date();
+            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            String envio = df.format(fecha);
+            emisor = "Ricardo";
+            receptor = (String) jt_contactos.getValueAt(jt_contactos.getSelectedRow(), 0);
+            String texto = ta_mensaje.getText();
+            db.query.execute("INSERT INTO buzon"
+                    + "(emisor,receptor,fecha,mensaje)"
+                    + "VALUES ('" + emisor + "', '" + receptor + "', '" + envio + "', '" + texto + "')");
+            db.commit();
+        } catch (SQLException e) {
+        }
+        db.desconectar();
+    }//GEN-LAST:event_jButton5MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -424,6 +507,8 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -435,12 +520,18 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JDialog jd_mensaje;
     private javax.swing.JTable jt_contactos;
     private javax.swing.JSpinner sp_edadC;
+    private javax.swing.JTextArea ta_mensaje;
     private javax.swing.JTextField tf_correoC;
     private javax.swing.JTextField tf_direccionC;
     private javax.swing.JTextField tf_nombreC;
     private javax.swing.JTextField tf_numC;
     // End of variables declaration//GEN-END:variables
+     String receptor;
+    String emisor;
+
 }
