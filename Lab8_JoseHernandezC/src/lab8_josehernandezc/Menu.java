@@ -7,6 +7,7 @@ package lab8_josehernandezc;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -20,8 +21,28 @@ public class Menu extends javax.swing.JFrame {
      */
     public Menu() {
         initComponents();
+        this.setLocationRelativeTo(null);
+        Usuario principal = new Usuario("Ricardo", 22, "98672341", "ricarditoPapu@gmail.com", "Col.Altos del Trapiche");
+        DefaultTableModel model = (DefaultTableModel) jt_contactos.getModel();
+        Dba db = new Dba("./registro.accdb");
+        db.conectar();
+        String[] datos = new String[5];
+        try {
+            db.query.execute("select nombre,edad,numCel,correo,direccion from Contactos");
+            ResultSet rs = db.query.getResultSet();
+            while (rs.next()) {
+                datos[0] = rs.getString("nombre");
+                datos[1] = rs.getString("edad");
+                datos[2] = rs.getString("numCel");
+                datos[3] = rs.getString("correo");
+                datos[4] = rs.getString("direccion");
+                model.addRow(datos);
+            }
+            jt_contactos.setModel(model);
+        } catch (SQLException e) {
+        }
+        db.desconectar();
 
-        Usuario principal = new Usuario("Ricardo", 22, 98672341, "ricarditoPapu@gmail.com", "Col.Altos del Trapiche");
     }
 
     /**
@@ -164,8 +185,18 @@ public class Menu extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jt_contactos);
 
         jButton2.setText("Modificar Contacto");
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton2MouseClicked(evt);
+            }
+        });
 
         jButton3.setText("Eliminar Contacto");
+        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton3MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -259,6 +290,11 @@ public class Menu extends javax.swing.JFrame {
             String numero = tf_numC.getText();
             String correo = tf_correoC.getText();
             String direccion = tf_direccionC.getText();
+            Object[] newRow = {nombre, edad, numero, correo, direccion
+
+            };
+            model.addRow(newRow);
+
             db.query.execute("INSERT INTO Contactos"
                     + "(nombre,edad,numCel,correo,direccion)"
                     + " VALUES ('" + nombre + "', '" + edad + "', '" + numero + "', '" + correo + "', '" + direccion + "')");
@@ -266,28 +302,88 @@ public class Menu extends javax.swing.JFrame {
 
         } catch (SQLException e) {
         }
-        String[] datos = new String[5];
-        try {
-            db.query.execute("select nombre,edad,numCel,correo,direccion from Contactos");
-            ResultSet rs = db.query.getResultSet();
-            while (rs.next()) {
-                datos[0] = rs.getString("nombre");
-                datos[1] = rs.getString("edad");
-                datos[2] = rs.getString("numCel");
-                datos[3] = rs.getString("correo");
-                datos[4] = rs.getString("direccion");
-                model.addRow(datos);
-            }
-            jt_contactos.setModel(model);
-        } catch (SQLException e) {
-        }
+        jt_contactos.setModel(model);
+
+        db.desconectar();
         tf_correoC.setText("");
         tf_nombreC.setText("");
         sp_edadC.setValue(0);
         tf_direccionC.setText("");
         tf_numC.setText("");
-        db.desconectar();
+
     }//GEN-LAST:event_jButton1MouseClicked
+
+    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+        DefaultTableModel model = (DefaultTableModel) jt_contactos.getModel();
+        Dba db = new Dba("./registro.accdb");
+        db.conectar();
+        try {
+            if (jt_contactos.getSelectedRow() >= 0) {
+                String referencia = (String) jt_contactos.getValueAt(jt_contactos.getSelectedRow(), 2);
+                System.out.println(referencia);
+                int opcion = Integer.parseInt(JOptionPane.showInputDialog("1.Modificar Nombre\n"
+                        + "2.Modificar Edad\n"
+                        + "3.Modificar Numero de Telefono\n"
+                        + "4.Modificar Correo\n"
+                        + "5.Modificar Direccion"));
+                if (opcion == 1) {
+                    String newName = JOptionPane.showInputDialog("Ingrese el Nuevo Nombre");
+                    jt_contactos.setValueAt(newName, jt_contactos.getSelectedRow(), 0);
+                    db.query.execute("update Contactos set nombre =" + newName + " where numCel =" + referencia);
+                    db.commit();
+
+                }
+                if (opcion == 2) {
+                    int newEdad = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la nueva Edad"));
+                    jt_contactos.setValueAt(newEdad, jt_contactos.getSelectedRow(), 1);
+                    db.query.execute("update Contactos set edad=" + newEdad + "where numCel=" + referencia);
+                    db.commit();
+                }
+                if (opcion == 3) {
+                    int newNuero = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el Nuevo Numero de Celular"));
+                    jt_contactos.setValueAt(newNuero, jt_contactos.getSelectedRow(), 2);
+                    db.query.execute("update Contactos set numCel=" + newNuero + "where numCel=" + referencia);
+                    db.commit();
+                }
+                if (opcion == 4) {
+                    String newCorreo = JOptionPane.showInputDialog("Ingrese el nuevo Correo");
+                    jt_contactos.setValueAt(newCorreo, jt_contactos.getSelectedRow(), 3);
+                    db.query.execute("update Contactos set correo=" + newCorreo + "where numCel=" + referencia);
+                    db.commit();
+                }
+                if (opcion == 5) {
+                    String newDireccion = JOptionPane.showInputDialog("Ingrese La Nueva Direccion");
+                    jt_contactos.setValueAt(newDireccion, jt_contactos.getSelectedRow(), 4);
+                    db.query.execute("update Contactos set direccion=" + newDireccion + "where numCel" + referencia);
+                    db.commit();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        db.desconectar();
+
+    }//GEN-LAST:event_jButton2MouseClicked
+
+    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
+        DefaultTableModel mo = (DefaultTableModel) jt_contactos.getModel();
+        Dba db = new Dba("./registro.accdb");
+        db.conectar();
+        try {
+            if (jt_contactos.getSelectedRow() >= 0) {
+                String referencia = (String) jt_contactos.getValueAt(jt_contactos.getSelectedRow(), 2);
+                mo.removeRow(jt_contactos.getSelectedRow());
+                jt_contactos.setModel(mo);
+
+                db.query.execute("delete from Contactos where numCel=" + referencia);
+                db.commit();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        db.desconectar();
+
+    }//GEN-LAST:event_jButton3MouseClicked
 
     /**
      * @param args the command line arguments

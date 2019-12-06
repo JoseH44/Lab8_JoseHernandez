@@ -11,7 +11,7 @@ package lab8_josehernandezc;
  */
 public class Contactos extends Usuario {
 
-    public Contactos(String nombre, int edad, int numero, String correo, String direccion) {
+    public Contactos(String nombre, int edad, String numero, String correo, String direccion) {
         super(nombre, edad, numero, correo, direccion);
     }
 

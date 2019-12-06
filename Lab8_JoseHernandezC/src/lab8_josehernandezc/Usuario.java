@@ -13,14 +13,14 @@ public class Usuario {
 
     private String nombre;
     private int edad;
-    private int numero;
+    private String numero;
     private String correo;
     private String direccion;
 
     public Usuario() {
     }
 
-    public Usuario(String nombre, int edad, int numero, String correo, String direccion) {
+    public Usuario(String nombre, int edad, String numero, String correo, String direccion) {
         this.nombre = nombre;
         this.edad = edad;
         this.numero = numero;
@@ -44,11 +44,11 @@ public class Usuario {
         this.edad = edad;
     }
 
-    public int getNumero() {
+    public String getNumero() {
         return numero;
     }
 
-    public void setNumero(int numero) {
+    public void setNumero(String numero) {
         this.numero = numero;
     }
 
