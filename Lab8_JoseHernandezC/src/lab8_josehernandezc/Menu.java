@@ -8,6 +8,7 @@ package lab8_josehernandezc;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -26,6 +27,7 @@ public class Menu extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         Usuario principal = new Usuario("Ricardo", 22, "98672341", "ricarditoPapu@gmail.com", "Col.Altos del Trapiche");
         DefaultTableModel model = (DefaultTableModel) jt_contactos.getModel();
+        DefaultTableModel modelo = (DefaultTableModel) jt_mensajes.getModel();
         Dba db = new Dba("./registro.accdb");
         db.conectar();
         String[] datos = new String[5];
@@ -41,6 +43,19 @@ public class Menu extends javax.swing.JFrame {
                 model.addRow(datos);
             }
             jt_contactos.setModel(model);
+        } catch (SQLException e) {
+        }
+        String[] datosM = new String[3];
+        try {
+            db.query.execute("select receptor,fecha,mensaje from buzon");
+            ResultSet rs = db.query.getResultSet();
+            while (rs.next()) {
+                datosM[0] = rs.getString("receptor");
+                datosM[1] = rs.getString("fecha");
+                datosM[2] = rs.getString("mensaje");
+                modelo.addRow(datosM);
+            }
+            jt_mensajes.setModel(modelo);
         } catch (SQLException e) {
         }
         db.desconectar();
@@ -60,6 +75,11 @@ public class Menu extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         ta_mensaje = new javax.swing.JTextArea();
         jButton5 = new javax.swing.JButton();
+        jd_llamando = new javax.swing.JDialog();
+        jLabel8 = new javax.swing.JLabel();
+        jl_tiempo = new javax.swing.JLabel();
+        jButton7 = new javax.swing.JButton();
+        jl_receptor = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -79,9 +99,13 @@ public class Menu extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
+        jButton6 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jt_mensajes = new javax.swing.JTable();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jt_llamadas = new javax.swing.JTable();
 
         ta_mensaje.setColumns(20);
         ta_mensaje.setRows(5);
@@ -115,6 +139,51 @@ public class Menu extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addComponent(jButton5)
                 .addGap(19, 19, 19))
+        );
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel8.setText("Llamando a:");
+
+        jl_tiempo.setText("00:00:00");
+
+        jButton7.setText("Colgar");
+        jButton7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton7MouseClicked(evt);
+            }
+        });
+
+        jl_receptor.setFont(new java.awt.Font("Tahoma", 3, 14)); // NOI18N
+
+        javax.swing.GroupLayout jd_llamandoLayout = new javax.swing.GroupLayout(jd_llamando.getContentPane());
+        jd_llamando.getContentPane().setLayout(jd_llamandoLayout);
+        jd_llamandoLayout.setHorizontalGroup(
+            jd_llamandoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jd_llamandoLayout.createSequentialGroup()
+                .addGap(52, 52, 52)
+                .addGroup(jd_llamandoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jl_receptor, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jd_llamandoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jd_llamandoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel8)
+                            .addComponent(jl_tiempo))
+                        .addGroup(jd_llamandoLayout.createSequentialGroup()
+                            .addGap(31, 31, 31)
+                            .addComponent(jButton7))))
+                .addContainerGap(74, Short.MAX_VALUE))
+        );
+        jd_llamandoLayout.setVerticalGroup(
+            jd_llamandoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jd_llamandoLayout.createSequentialGroup()
+                .addGap(73, 73, 73)
+                .addComponent(jLabel8)
+                .addGap(72, 72, 72)
+                .addComponent(jl_receptor, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
+                .addComponent(jl_tiempo)
+                .addGap(93, 93, 93)
+                .addComponent(jButton7)
+                .addGap(39, 39, 39))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -246,82 +315,145 @@ public class Menu extends javax.swing.JFrame {
             }
         });
 
+        jButton6.setText("Llamar");
+        jButton6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton6MouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 753, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(50, 50, 50)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton2)
+                            .addComponent(jButton3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton4)
+                            .addComponent(jButton6))
+                        .addGap(139, 139, 139)))
                 .addContainerGap())
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(171, 171, 171)
-                .addComponent(jButton2)
-                .addGap(47, 47, 47)
-                .addComponent(jButton4)
-                .addGap(62, 62, 62)
-                .addComponent(jButton3)
-                .addContainerGap(150, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(94, 94, 94)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
-                    .addComponent(jButton3)
                     .addComponent(jButton4))
-                .addGap(53, 53, 53))
+                .addGap(29, 29, 29)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton3)
+                    .addComponent(jButton6))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Contactos", jPanel2);
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 773, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 462, Short.MAX_VALUE)
-        );
+        jt_mensajes.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
 
-        jTabbedPane1.addTab("tab3", jPanel3);
+            },
+            new String [] {
+                "Receptor", "Fecha", "Mensaje"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(jt_mensajes);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 773, Short.MAX_VALUE)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 709, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(42, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 462, Short.MAX_VALUE)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(52, 52, 52)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(71, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("tab4", jPanel4);
+        jTabbedPane1.addTab("Mensajes", jPanel4);
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 773, Short.MAX_VALUE)
+        jt_llamadas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Receptor", "Duracion", "Fecha"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Double.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane4.setViewportView(jt_llamadas);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 753, Short.MAX_VALUE)
+                .addContainerGap())
         );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 462, Short.MAX_VALUE)
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(79, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(76, 76, 76))
         );
 
-        jTabbedPane1.addTab("tab5", jPanel5);
+        jTabbedPane1.addTab("Registro de Llamadas", jPanel3);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 778, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -452,15 +584,22 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4MouseClicked
 
     private void jButton5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton5MouseClicked
+        DefaultTableModel m = (DefaultTableModel) jt_mensajes.getModel();
         Dba db = new Dba("./registro.accdb");
         db.conectar();
         try {
+
             Date fecha = new Date();
             SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
             String envio = df.format(fecha);
             emisor = "Ricardo";
             receptor = (String) jt_contactos.getValueAt(jt_contactos.getSelectedRow(), 0);
             String texto = ta_mensaje.getText();
+            Object[] row = {
+                receptor, envio, texto
+            };
+            m.addRow(row);
+            jt_mensajes.setModel(m);
             db.query.execute("INSERT INTO buzon"
                     + "(emisor,receptor,fecha,mensaje)"
                     + "VALUES ('" + emisor + "', '" + receptor + "', '" + envio + "', '" + texto + "')");
@@ -468,7 +607,66 @@ public class Menu extends javax.swing.JFrame {
         } catch (SQLException e) {
         }
         db.desconectar();
+
+        jd_mensaje.dispose();
     }//GEN-LAST:event_jButton5MouseClicked
+
+    private void jButton6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton6MouseClicked
+        fecha1 = new Date();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        String envio = df.format(fecha1);
+        emisor = "Ricardo";
+        receptor = (String) jt_contactos.getValueAt(jt_contactos.getSelectedRow(), 0);
+        jl_receptor.setText(receptor);
+        timepo = new HiloLlamada(jl_tiempo);
+        Thread proceso = new Thread(timepo);
+        proceso.start();
+        jd_llamando.pack();
+        jd_llamando.setModal(true);
+        jd_llamando.setLocationRelativeTo(this);
+        jd_llamando.setVisible(true);
+
+
+    }//GEN-LAST:event_jButton6MouseClicked
+
+    private void jButton7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton7MouseClicked
+        DefaultTableModel mT = (DefaultTableModel) jt_llamadas.getModel();
+        //duracion = jl_tiempo.getText();
+        llamdas.add(new Llamada(emisor, receptor, duracion, fecha1));
+        jt_llamadas.setModel(new javax.swing.table.DefaultTableModel(
+                new Object[][]{},
+                new String[]{
+                    "Receptor", "Duracion", "Fecha"
+                }
+        ) {
+            Class[] types = new Class[]{
+                java.lang.String.class, java.lang.Double.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean[]{
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types[columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
+            }
+        });
+        for (int i = 0; i < llamdas.size(); i++) {
+            Object[] rowrow = {
+                llamdas.get(i).getReceptor(),
+                llamdas.get(i).getDuracion(),
+                llamdas.get(i).getFecha_llamada()
+            };
+            mT.addRow(rowrow);
+        }
+        jt_llamadas.setModel(mT);
+        timepo.setVive(false);
+        jd_llamando.dispose();
+
+    }//GEN-LAST:event_jButton7MouseClicked
 
     /**
      * @param args the command line arguments
@@ -511,21 +709,30 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JDialog jd_llamando;
     private javax.swing.JDialog jd_mensaje;
+    private javax.swing.JLabel jl_receptor;
+    private javax.swing.JLabel jl_tiempo;
     private javax.swing.JTable jt_contactos;
+    private javax.swing.JTable jt_llamadas;
+    private javax.swing.JTable jt_mensajes;
     private javax.swing.JSpinner sp_edadC;
     private javax.swing.JTextArea ta_mensaje;
     private javax.swing.JTextField tf_correoC;
@@ -535,5 +742,9 @@ public class Menu extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
      String receptor;
     String emisor;
+    ArrayList<Llamada> llamdas = new ArrayList();
+    Date fecha1;
+    HiloLlamada timepo;
+    String duracion;
 
 }
